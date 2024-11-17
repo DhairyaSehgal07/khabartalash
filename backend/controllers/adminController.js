@@ -1,67 +1,58 @@
 import Admin from "../models/AdminModel.js";
-import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 
-const registerAdmin = async (req, res) => {
+const loginAdmin = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { email, password } = req.body;
 
     // Validate required fields
-    if (!firstName || !lastName || !email || !password) {
+    if (!email || !password) {
       return res.status(400).json({
         success: false,
-        message: "All fields are required",
+        message: "Email and Password are required",
       });
     }
 
-    // Check if admin already exists
-    const adminExists = await Admin.findOne({ email });
-    if (adminExists) {
-      return res.status(400).json({
-        success: false,
-        message: "Admin already exists, please log in.",
-      });
-    }
+    const admin = await Admin.findOne({ email });
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create the new admin
-    const newAdmin = await Admin.create({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-    });
-
-    if (newAdmin) {
-      // Generate a token
-      const token = await generateToken(res, newAdmin._id);
-
-      // Send a success response
-      return res.status(201).json({
-        success: true,
-        data: {
-          _id: newAdmin._id,
-          firstName: newAdmin.firstName,
-          lastName: newAdmin.lastName,
-          email: newAdmin.email,
-          token, // Include token in the response
-        },
+    if (admin && (await admin.matchPassword(password))) {
+      generateToken(res, admin._id);
+      res.status(200).json({
+        _id: admin._id,
+        firstName: admin.firstName,
+        lastName: admin.lastName,
+        email: admin.email,
       });
     } else {
-      return res.status(500).json({
-        success: false,
-        message: "Failed to create admin. Please try again.",
-      });
+      res.status(401);
+      throw new Error("Invalid email or password");
     }
   } catch (err) {
-    console.error("Error in registerAdmin:", err);
+    console.log(err);
     res.status(500).json({
-      success: false,
-      message: "An error occurred while registering the admin.",
+      message: "Some error occured while admin sign-in",
     });
   }
 };
 
-export { registerAdmin };
+const logoutAdmin = async (req, res) => {
+  try {
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Admin logged out",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      message: "Some error occured while admin sign-out",
+    });
+  }
+};
+
+export { loginAdmin, logoutAdmin };

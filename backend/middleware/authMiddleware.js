@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import Admin from "../models/AdminModel";
+import Admin from "../models/AdminModel.js";
 
-const protect = async (req, res) => {
+const protect = async (req, res, next) => {
   try {
     let token;
 
@@ -19,6 +19,7 @@ const protect = async (req, res) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.admin = await Admin.findById(decoded.adminId).select("--password");
+    next();
     return;
   } catch (err) {
     if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
