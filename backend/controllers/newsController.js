@@ -2,7 +2,7 @@ import News from "../models/newsModel.js";
 
 const createNews = async (req, res) => {
   try {
-    const { title, imageUrl, description } = req.body;
+    const { title, imageUrl, description, category } = req.body;
 
     if (!title || !imageUrl || !description) {
       return res.status(400).json({
@@ -14,6 +14,7 @@ const createNews = async (req, res) => {
       title,
       imageUrl,
       description,
+      category,
     });
 
     if (newNews) {
@@ -91,6 +92,7 @@ const updateSingleNews = async (req, res) => {
       news.title = req.body.title || news.title;
       news.imageUrl = req.body.imageUrl || news.imageUrl;
       news.description = req.body.description || news.description;
+      news.category = req.body.category || news.category;
     }
 
     const updatedNews = await news.save();
@@ -100,6 +102,7 @@ const updateSingleNews = async (req, res) => {
       title: updatedNews.title,
       imageUrl: updatedNews.imageUrl,
       description: updatedNews.description,
+      category: updatedNews.category,
     });
   } catch (err) {
     console.error(err);

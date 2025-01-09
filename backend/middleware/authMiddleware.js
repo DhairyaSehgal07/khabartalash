@@ -9,6 +9,8 @@ const protect = async (req, res, next) => {
       token = req.cookies.jwt;
     }
 
+    console.log(req.cookies);
+
     if (!token) {
       res.status(401).json({
         success: false,

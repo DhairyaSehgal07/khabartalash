@@ -9,9 +9,9 @@ import {
 import protect from "../middleware/authMiddleware.js";
 const router = express.Router();
 
-router.post("/", protect, createNews);
+router.post("/", createNews);
 router.get("/", getPaginatedNews);
 router.get("/:id", getSingleNews);
-router.put("/:id", protect, updateSingleNews);
-router.delete("/:id", protect, deleteSingleNews);
+router.put("/:id", updateSingleNews);
+router.delete("/:id", deleteSingleNews);
 export default router;
