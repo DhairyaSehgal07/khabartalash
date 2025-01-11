@@ -1,13 +1,14 @@
 "use client";
-
 import React, { useRef, useCallback } from "react";
 import Link from "next/link";
 import useFetchNews from "@/hooks/useFetchNews";
 import { News } from "@/utils/types";
+import { capitalizeFirstLetter } from "@/utils/helpers";
 
-const NewsList = () => {
+const CategoryNewsScreen = ({ slug }: { slug: string }) => {
+  const capitalizedSlug = capitalizeFirstLetter(slug[0]);
   const { news, loading, error, loadMore, currentPage, totalPages } =
-    useFetchNews(1, 10, "all");
+    useFetchNews(1, 10, capitalizedSlug);
   const observer = useRef<IntersectionObserver | null>(null);
 
   const lastNewsElementRef = useCallback(
@@ -27,6 +28,9 @@ const NewsList = () => {
   return (
     <>
       <div className="p-4">
+        <h1 className="mb-6 text-2xl font-semibold capitalize">
+          News for category: {slug}
+        </h1>
         <div className="space-y-4">
           {news.map((item: News, index) => (
             <div key={item._id}>
@@ -37,13 +41,10 @@ const NewsList = () => {
               >
                 <div className="flex flex-col items-start md:flex-row md:space-x-4">
                   <div className="relative h-16 w-16 flex-shrink-0">
-                    {/* Uncomment this block if you have valid image URLs */}
-                    {/* <Image
-                    src={item.imageUrl}
-                    alt={item.title}
-                    fill
-                    className="rounded object-cover"
-                  /> */}
+                    {/* Replace this with an actual image if you have one */}
+                    <div className="flex items-center justify-center rounded bg-gray-200 text-gray-500">
+                      Image Placeholder
+                    </div>
                   </div>
                   <div className="mt-4 flex-1 text-left md:mt-0">
                     <h2 className="text-lg font-semibold text-gray-800">
@@ -74,4 +75,4 @@ const NewsList = () => {
   );
 };
 
-export default NewsList;
+export default CategoryNewsScreen;

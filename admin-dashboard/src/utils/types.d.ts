@@ -8,6 +8,16 @@ export interface Admin {
 export interface News {
   _id: string;
   title: string;
-  imageUrl: string;
   description: string;
+  imageUrl: string;
+  category: string;
+  date: string;
+}
+
+export interface Interview {
+  _id: string;
+  title: string;
+  videoLink: string;
+  description: string;
+  date: string;
 }

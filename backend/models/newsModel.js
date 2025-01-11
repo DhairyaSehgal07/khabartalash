@@ -17,6 +17,10 @@ const newsSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  date: {
+    type: String,
+    required: true,
+  },
 });
 
 const News = mongoose.model("News", newsSchema);

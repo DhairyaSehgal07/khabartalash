@@ -1,8 +1,14 @@
 import Interview from "../models/interviewModel.js"; // Adjust the import path as per your project structure
+import { formatDate, capitalizeFirstLetter } from "../utils/helpers.js";
 
 const createInterview = async (req, res) => {
   try {
     const { title, videoLink, description } = req.body;
+
+    const date = formatDate(new Date());
+
+    const capitalizedTitle = capitalizeFirstLetter(title);
+    const capitalizedDescription = capitalizeFirstLetter(description);
 
     if (!title || !videoLink || !description) {
       return res.status(400).json({
@@ -11,9 +17,10 @@ const createInterview = async (req, res) => {
       });
     }
     const newInterview = await Interview.create({
-      title,
+      title: capitalizedTitle,
       videoLink,
-      description,
+      description: capitalizedDescription,
+      date,
     });
 
     if (newInterview) {

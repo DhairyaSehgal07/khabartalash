@@ -1,20 +1,28 @@
 import News from "../models/newsModel.js";
-
+import { formatDate, capitalizeFirstLetter } from "../utils/helpers.js";
 const createNews = async (req, res) => {
   try {
     const { title, imageUrl, description, category } = req.body;
 
-    if (!title || !imageUrl || !description) {
+    const date = formatDate(new Date());
+
+    if (!title || !imageUrl || !description || !category) {
       return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
     }
+
+    const capitalizedTitle = capitalizeFirstLetter(title);
+    const capitalizedDescription = capitalizeFirstLetter(description);
+    const capitalizedCategory = capitalizeFirstLetter(category);
+
     const newNews = await News.create({
-      title,
+      title: capitalizedTitle,
       imageUrl,
-      description,
-      category,
+      description: capitalizedDescription,
+      category: capitalizedCategory,
+      date: date,
     });
 
     if (newNews) {
@@ -27,23 +35,32 @@ const createNews = async (req, res) => {
     console.error(err);
     return res.status(500).json({
       success: false,
-      message: "Some error occured while creating news",
+      message: "Some error occurred while creating news",
     });
   }
 };
 
 const getPaginatedNews = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, category } = req.query;
 
     const pageNumber = Math.max(1, parseInt(page));
     const limitNumber = Math.max(1, parseInt(limit));
 
     const skip = (pageNumber - 1) * limitNumber;
 
-    const newsList = await News.find().skip(skip).limit(limitNumber);
+    let query = {};
 
-    const totalNews = await News.countDocuments();
+    // If a category is provided and it's not "all", filter by category
+    if (category && category !== "all") {
+      query.category = category;
+    }
+
+    // Fetch the filtered news based on query
+    const newsList = await News.find(query).skip(skip).limit(limitNumber);
+
+    // Count the total number of news items matching the query
+    const totalNews = await News.countDocuments(query);
 
     return res.status(200).json({
       success: true,
@@ -60,8 +77,6 @@ const getPaginatedNews = async (req, res) => {
     });
   }
 };
-
-export default getPaginatedNews;
 
 const getSingleNews = async (req, res) => {
   try {

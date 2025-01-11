@@ -4,6 +4,7 @@ export interface News {
   description: string;
   imageUrl: string;
   category: string;
+  date: string;
 }
 
 export interface Interview {
@@ -12,4 +13,5 @@ export interface Interview {
   videoLink: string;
   imageUrl: string;
   description: string;
+  date: string;
 }

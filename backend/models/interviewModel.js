@@ -13,6 +13,10 @@ const interviewSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  date: {
+    type: String,
+    required: true,
+  },
 });
 
 const Interview = mongoose.model("Interview", interviewSchema);

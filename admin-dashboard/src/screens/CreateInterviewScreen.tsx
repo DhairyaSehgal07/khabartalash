@@ -1,12 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
 
-const CreateNewsScreen = () => {
+const CreateInterviewScreen = () => {
   const [formData, setFormData] = useState({
     title: "",
-    imageUrl: "",
+    videoLink: "",
     description: "",
-    category: "", // Add category field to form data
   });
 
   const [message, setMessage] = useState("");
@@ -21,10 +20,10 @@ const CreateNewsScreen = () => {
 
     try {
       console.log("form data is: ", formData);
-      const response = await axios.post("/api/news", formData);
+      const response = await axios.post("/api/interviews", formData);
       if (response.data.success) {
-        setMessage("News created successfully!");
-        setFormData({ title: "", imageUrl: "", description: "", category: "" }); // Reset form
+        setMessage("Interview created successfully!");
+        setFormData({ title: "", videoLink: "", description: "" }); // Reset form
       }
     } catch (error) {
       console.error(error);
@@ -36,7 +35,7 @@ const CreateNewsScreen = () => {
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-4">
       <div className="bg-white rounded shadow-lg p-6 md:p-8 w-full max-w-lg">
         <h1 className="text-3xl font-semibold text-gray-800 mb-6">
-          Create News
+          Create Interview
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="form-group">
@@ -49,44 +48,25 @@ const CreateNewsScreen = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              placeholder="Enter news title"
+              placeholder="Enter interview title"
               required
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-gray-500"
             />
           </div>
           <div className="form-group">
-            <label htmlFor="imageUrl" className="block text-gray-600 mb-2">
-              Image URL
+            <label htmlFor="videoLink" className="block text-gray-600 mb-2">
+              Video Link
             </label>
             <input
               type="text"
-              id="imageUrl"
-              name="imageUrl"
-              value={formData.imageUrl}
+              id="videoLink"
+              name="videoLink"
+              value={formData.videoLink}
               onChange={handleChange}
-              placeholder="Enter image URL"
+              placeholder="Enter video link"
               required
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-gray-500"
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="category" className="block text-gray-600 mb-2">
-              Category
-            </label>
-            <select
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-gray-500"
-            >
-              <option value="">Select category</option>
-              <option value="Politics">Politics</option>
-              <option value="Technology">Technology</option>
-              <option value="Sports">Sports</option>
-              <option value="Entertainment">Entertainment</option>
-            </select>
           </div>
           <div className="form-group">
             <label htmlFor="description" className="block text-gray-600 mb-2">
@@ -97,7 +77,7 @@ const CreateNewsScreen = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Enter news description"
+              placeholder="Enter interview description"
               rows="5"
               required
               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-gray-500"
@@ -107,7 +87,7 @@ const CreateNewsScreen = () => {
             type="submit"
             className="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-900 transition"
           >
-            Create News
+            Create Interview
           </button>
         </form>
         {message && <p className="mt-4 text-center text-gray-600">{message}</p>}
@@ -116,4 +96,4 @@ const CreateNewsScreen = () => {
   );
 };
 
-export default CreateNewsScreen;
+export default CreateInterviewScreen;

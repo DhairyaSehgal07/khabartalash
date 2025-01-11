@@ -11,10 +11,10 @@ const DashboardScreen = () => {
       </Link>
       {/* Box 2 */}
       <Link
-        to="/videos"
+        to="/interviews"
         className="bg-gray-800 h-40 md:h-64 flex justify-center items-center text-white p-4 rounded shadow"
       >
-        <h1 className="text-3xl font-semibold"> Videos</h1>
+        <h1 className="text-3xl font-semibold"> Interviews</h1>
       </Link>
     </main>
   );

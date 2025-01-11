@@ -9,10 +9,10 @@ import {
 import protect from "../middleware/authMiddleware.js";
 const router = express.Router();
 
-router.post("/", protect, createInterview);
+router.post("/", createInterview);
 router.get("/", getPaginatedInterviews);
 router.get("/:id", getSingleInterview);
-router.put("/:id", protect, updateSingleInterview);
-router.delete("/:id", protect, deleteSingleInterview);
+router.put("/:id", updateSingleInterview);
+router.delete("/:id", deleteSingleInterview);
 
 export default router;
